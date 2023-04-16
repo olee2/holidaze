@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import hamburger from '../../assets/hamburger.svg';
+import styles from './Nav.module.css';
 
 function Nav() {
   const location = useLocation();
@@ -16,20 +17,24 @@ function Nav() {
 
   return (
     <nav>
-      <button type="button" className="hamburger" onClick={handleDisplay}>
+      <button
+        type="button"
+        className={styles.hamburger}
+        onClick={handleDisplay}
+      >
         <img
           src={hamburger}
-          className={`${display && 'active-hamburger'}`}
+          className={display && styles.activeHamburger}
           alt="hamburger icon"
         />
       </button>
 
-      <div className={`nav-container ${display && 'show'}`}>
-        <div className="link-container">
-          <Link className="nav-link" to="/">
+      <div className={`${styles.navContainer} ${display && styles.show}`}>
+        <div className={styles.linkContainer}>
+          <Link className={styles.navLink} to="/">
             Home
           </Link>
-          <Link className="nav-link" to="/contact">
+          <Link className={styles.navLink} to="/contact">
             Contact
           </Link>
         </div>

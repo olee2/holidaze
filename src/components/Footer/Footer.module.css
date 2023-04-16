@@ -1,0 +1,23 @@
+.footer {
+  background-color: red;
+  border-top: 1px solid grey;
+  color: blue;
+}
+
+.copyrightContainer {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.copyright {
+  width: 0.9rem;
+}
+
+.footer h2 {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.footer p {
+  font-size: 0.8rem;
+}
