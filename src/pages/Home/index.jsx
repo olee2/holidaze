@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Hero from "../../components/Hero";
 import styles from "./Home.module.css";
 import { fetchVenues } from "../../api/fetchVenues";
+import { Card } from "../../components/Card";
 
 const Home = () => {
   const [venues, setVenues] = useState();
@@ -25,7 +26,7 @@ const Home = () => {
   return (
     <main>
       <Hero />
-      <div className="grid"></div>
+      <div className={styles.grid}>{venues?.map((v) => Card(v))}</div>
     </main>
   );
 };
