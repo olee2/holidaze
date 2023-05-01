@@ -1,7 +1,7 @@
 .footer {
-  background-color: red;
-  border-top: 1px solid grey;
-  color: blue;
+  background-color: var(--bg-light);
+  border-top: 1px solid var(--border-color);
+  color: var(--primary-color);
 }
 
 .copyrightContainer {
