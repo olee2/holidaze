@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import hamburger from '../../assets/hamburger.svg';
-import styles from './Nav.module.css';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import hamburger from "../../assets/hamburger.svg";
+import styles from "./Nav.module.css";
 
 function Nav() {
   const location = useLocation();
