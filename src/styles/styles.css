@@ -22,8 +22,8 @@ dd {
 }
 
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-ul[role='list'],
-ol[role='list'] {
+ul[role="list"],
+ol[role="list"] {
   list-style: none;
 }
 
@@ -76,7 +76,7 @@ select {
 }
 
 :root {
-  --primary-color: #732937;
+  --primary-color: #d95f98;
   --secondary-color: #66a2e7;
   --tertiary-color: #f2ac29;
 
@@ -103,4 +103,24 @@ select {
 h1 {
   font-size: 3rem;
   font-weight: 600;
+}
+
+h2,
+p {
+  color: var(--text-color);
+}
+.btn {
+  text-decoration: none;
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+  border-radius: 5px;
+  transition: 0.2s;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
 }

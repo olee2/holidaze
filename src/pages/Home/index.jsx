@@ -11,7 +11,7 @@ const Home = () => {
 
   const handleVenues = async () => {
     try {
-      const data = await fetchVenues();
+      const data = await fetchVenues(9);
       setVenues(data);
     } catch (err) {
       console.log(err);
@@ -26,7 +26,11 @@ const Home = () => {
   return (
     <main>
       <Hero />
-      <div className={styles.grid}>{venues?.map((v) => Card(v))}</div>
+      <div className={styles.grid}>
+        {venues?.map((v) => (
+          <Card {...v} />
+        ))}
+      </div>
     </main>
   );
 };
