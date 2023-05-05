@@ -14,7 +14,7 @@ const Home = () => {
   const [query, setQuery] = useState("");
 
   const handleQuery = (event) => {
-    setQuery(event.target.value.toLowerCase());
+    setQuery(event.target.value.replace(/[^a-zA-Z\d]/gi, "").toLowerCase());
   };
 
   useEffect(() => {

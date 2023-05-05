@@ -7,9 +7,14 @@ export const Search = ({ handleQuery, query }) => {
       <p className={styles.searchLabel}>Search products: </p>
       <input
         value={query}
-        onChange={(v) => handleQuery(v)}
+        onChange={handleQuery}
         type="text"
         className={styles.search}
+        onKeyDown={(v) => {
+          if (v.key === "a") {
+            v.key = "b";
+          }
+        }}
       />
     </div>
   );
