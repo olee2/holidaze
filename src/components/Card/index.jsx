@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import styles from "./Card.module.css";
 import placeholder from "../../assets/placeholder.jpeg";
+import ImageCarousel from "../ImageCarousel";
 
 export const Card = (props) => {
-  const { media, name, description, price } = props;
+  const { media, name, description, price, id } = props;
   const imageRef = useRef();
 
   const backgroundImage = media[0] || placeholder;
@@ -22,7 +24,9 @@ export const Card = (props) => {
         <p className={styles.description}>{description}</p>
         <div className={styles.priceBtnContainer}>
           <p className={styles.price}>{price} NOK/night</p>
-          <button className={`btn`}>View</button>
+          <Link to={`/venue/${id}`} className={`btn`}>
+            View
+          </Link>
         </div>
       </div>
     </div>
