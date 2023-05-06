@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchVenues } from "../../api/fetchVenues";
 import styles from "./Venue.module.css";
 import ImageCarousel from "../../components/ImageCarousel";
+import AvailableDates from "../../components/AvailableDates";
 
 const Venue = () => {
   const [venue, setVenue] = useState(null);
@@ -38,6 +39,10 @@ const Venue = () => {
           <p>Zip: {venue.location.zip}</p>
           <p>Country: {venue.location.country}</p>
           <p>Continent: {venue.location.continent}</p>
+        </div>
+        <div className={styles.availableDates}>
+          <h2>Available Dates</h2>
+          <AvailableDates bookings={venue.bookings} />
         </div>
       </div>
     </main>
