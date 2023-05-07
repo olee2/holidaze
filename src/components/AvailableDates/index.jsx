@@ -25,11 +25,11 @@ const AvailableDates = ({ bookings }) => {
     return dates;
   }, []);
 
-  const isBooked = (date) => {
-    return bookedDates.some(
-      (bookedDate) => bookedDate.toDateString() === date.toDateString()
-    );
-  };
+  // const isBooked = (date) => {
+  //   return bookedDates.some(
+  //     (bookedDate) => bookedDate.toDateString() === date.toDateString()
+  //   );
+  // };
 
   return (
     <DateRangePicker

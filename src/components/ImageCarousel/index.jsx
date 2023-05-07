@@ -13,7 +13,7 @@ const ImageCarousel = ({ images }) => {
     >
       {images.map((img, index) => (
         <div key={index} className={styles.carouselItem}>
-          <img src={img} alt={`Carousel image ${index}`} />
+          <img src={img} alt={`Carousel item ${index}`} />
         </div>
       ))}
     </Carousel>

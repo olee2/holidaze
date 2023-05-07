@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Card.module.css";
 import placeholder from "../../assets/placeholder.jpeg";
-import ImageCarousel from "../ImageCarousel";
 
 export const Card = (props) => {
   const { media, name, description, price, id } = props;
