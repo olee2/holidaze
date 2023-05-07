@@ -1,6 +1,6 @@
 // AvailableDates.js
 import React, { useState } from "react";
-import { DateRangePicker } from "react-date-range";
+import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
@@ -32,17 +32,17 @@ const AvailableDates = ({ bookings }) => {
   // };
 
   return (
-    <DateRangePicker
+    <DateRange
       onChange={(item) => setState([item.selection])}
       showSelectionPreview={true}
-      months={2}
       direction="horizontal"
       ranges={state}
+      editableDateInputs={true}
       disabledDates={bookedDates}
       minDate={new Date()}
       moveRangeOnFirstSelection={false}
       className="date-range-picker"
-      rangeColors={["rgba(0, 166, 152, 1)"]}
+      rangeColors={["#66a2e7"]}
     />
   );
 };
