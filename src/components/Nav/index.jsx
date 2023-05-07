@@ -34,8 +34,8 @@ function Nav() {
           <Link className={styles.navLink} to="/">
             Home
           </Link>
-          <Link className={styles.navLink} to="/contact">
-            Contact
+          <Link className={styles.navLink} to="/register">
+            Register
           </Link>
         </div>
       </div>
