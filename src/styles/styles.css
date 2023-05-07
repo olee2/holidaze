@@ -125,3 +125,21 @@ p {
   background-color: var(--secondary-color);
   color: #fff;
 }
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flex2 {
+  flex: 2;
+}
+
+.mtb {
+  margin: 1rem 0;
+}
+
+.justify-between {
+  justify-content: space-between;
+}

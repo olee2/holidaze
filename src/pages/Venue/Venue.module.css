@@ -1,0 +1,14 @@
+.venue {
+  color: var(--text-color);
+}
+
+.tag {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 50px;
+}
+
+.availableDates {
+  flex: 1;
+}

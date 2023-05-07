@@ -24,25 +24,32 @@ const Venue = () => {
   return (
     <main>
       <div className={`${styles.venue} inner-container`}>
-        <h1 className={styles.name}>{venue.name}</h1>
-        <p className={styles.description}>{venue.description}</p>
-        <div className={styles.images}>
+        <div>
           <ImageCarousel images={venue.media} />
         </div>
-        <p className={styles.price}>Price: ${venue.price}</p>
-        <p className={styles.maxGuests}>Max Guests: {venue.maxGuests}</p>
-        <p className={styles.rating}>Rating: {venue.rating}</p>
-        <div className={styles.location}>
-          <h2>Location</h2>
-          <p>Address: {venue.location.address}</p>
-          <p>City: {venue.location.city}</p>
-          <p>Zip: {venue.location.zip}</p>
-          <p>Country: {venue.location.country}</p>
-          <p>Continent: {venue.location.continent}</p>
-        </div>
-        <div className={styles.availableDates}>
-          <h2>Available Dates</h2>
-          <AvailableDates bookings={venue.bookings} />
+        <div className="flex justify-between">
+          <div className="flex2">
+            <h1 className={styles.name}>{venue.name}</h1>
+            <p className={styles.description}>{venue.description}</p>
+            <div className="flex  mtb">
+              {" "}
+              <p className={styles.tag}>Price: ${venue.price} per night</p>
+              <p className={styles.tag}>Max Guests: {venue.maxGuests}</p>
+              <p className={styles.tag}>Rating: {venue.rating}</p>
+            </div>
+
+            <div className={styles.location}>
+              <h2>Location</h2>
+              <p>Address: {venue.location.address}</p>
+              <p>City: {venue.location.city}</p>
+              <p>Zip: {venue.location.zip}</p>
+              <p>Country: {venue.location.country}</p>
+            </div>
+          </div>
+          <div className={styles.availableDates}>
+            <h2>Available Dates</h2>
+            <AvailableDates bookings={venue.bookings} />
+          </div>
         </div>
       </div>
     </main>
