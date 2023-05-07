@@ -1,5 +1,7 @@
-export const fetchVenues = async () => {
-  const baseUrl = "https://api.noroff.dev/api/v1/holidaze/venues";
+export const fetchVenues = async (id) => {
+  const baseUrl = `https://api.noroff.dev/api/v1/holidaze/venues${
+    id ? "/" + id + "?_bookings=true" : ""
+  } `;
 
   try {
     const response = await fetch(baseUrl);
