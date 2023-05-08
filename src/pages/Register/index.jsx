@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
 import { registerUser } from "../../api/registerUser";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
@@ -11,9 +13,45 @@ export const Register = () => {
     venueManager: false,
   });
 
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+    password: "",
+    other: "",
+  });
+
+  const isValidEmail = (email) => {
+    const domainRegex = /^.+@(?:stud\.)?noroff\.no$/;
+    return domainRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    return password.length > 8;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+
+    if (name === "email") {
+      if (!isValidEmail(value)) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          email:
+            "Please enter a valid email ending with stud.noroff.no or noroff.no.",
+        }));
+      } else {
+        setErrorMessages((prev) => ({ ...prev, email: "" }));
+      }
+    } else if (name === "password") {
+      if (!isValidPassword(value)) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          password: "Password must be longer than 8 characters.",
+        }));
+      } else {
+        setErrorMessages((prev) => ({ ...prev, password: "" }));
+      }
+    }
   };
 
   const handleCheckbox = (e) => {
@@ -21,26 +59,27 @@ export const Register = () => {
     setFormValues({ ...formValues, [name]: checked });
   };
 
-  const isValidEmail = (email) => {
-    const domainRegex = /^.+@(?:stud\.)?noroff\.no$/;
-    return domainRegex.test(email);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (isValidEmail(formValues.email)) {
+    console.log(formValues);
+    if (!errorMessages.email && !errorMessages.password) {
       try {
         const response = await registerUser(formValues);
-
-        console.log(response);
+        if (response.statusCode >= 400) {
+          setErrorMessages((prev) => ({
+            ...prev,
+            other: response.errors[0].message,
+          }));
+        } else {
+          navigate("/login");
+        }
       } catch (error) {
-        console.log("error");
+        console.log(error);
+        setErrorMessages((prev) => ({
+          ...prev,
+          other: "An error occured. Please try again later",
+        }));
       }
-    } else {
-      alert(
-        "Please enter a valid email ending with stud.noroff.no or noroff.no."
-      );
     }
   };
 
@@ -50,6 +89,19 @@ export const Register = () => {
       <div className="inner-container">
         <div className={styles.formContainer}>
           <h2>Sign Up</h2>
+          <div className="errorContainer">
+            {" "}
+            {errorMessages.email && (
+              <div className="errorMessage">{errorMessages.email}</div>
+            )}
+            {errorMessages.password && (
+              <div className="errorMessage">{errorMessages.password}</div>
+            )}
+            {errorMessages.other && (
+              <div className="errorMessage">{errorMessages.other}</div>
+            )}
+          </div>
+
           <form onSubmit={handleSubmit}>
             <div className={styles.inputContainer}>
               <label htmlFor="name">Username: </label>
@@ -104,7 +156,9 @@ export const Register = () => {
                 onChange={handleCheckbox}
               />
             </div>
-            <button type="submit">Register</button>
+            <button type="submit" className="btn">
+              Register
+            </button>
           </form>
         </div>
       </div>
