@@ -33,7 +33,7 @@ const Home = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const handleVenues = async () => {
