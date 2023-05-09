@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import hamburger from "../../assets/hamburger.svg";
 import styles from "./Nav.module.css";
+import { AuthButton } from "../AuthButton";
 
 function Nav() {
   const location = useLocation();
@@ -34,9 +35,8 @@ function Nav() {
           <Link className={styles.navLink} to="/">
             Home
           </Link>
-          <Link className={styles.navLink} to="/register">
-            Register
-          </Link>
+
+          <AuthButton />
         </div>
       </div>
     </nav>
