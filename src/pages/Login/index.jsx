@@ -56,8 +56,8 @@ export const Login = () => {
           general: response.errors[0].message,
         });
       } else if (response.accessToken) {
-        const accessToken = response.accessToken;
-        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("user", JSON.stringify(response));
+
         navigate("/");
       }
     } catch (error) {
