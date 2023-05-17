@@ -7,7 +7,7 @@ export const AuthButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
