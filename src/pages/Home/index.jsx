@@ -95,7 +95,7 @@ const Home = () => {
       ) : (
         <div className={styles.grid}>
           {venues?.map((v) => (
-            <Card {...v} />
+            <Card {...v} key={v.id} />
           ))}
         </div>
       )}

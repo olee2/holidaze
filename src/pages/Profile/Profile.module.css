@@ -1,0 +1,33 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile img {
+  width: 200px;
+  border-radius: 50%;
+}
+
+.venue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.venue img {
+  max-width: 150px;
+}
+
+.venueBookings {
+  display: flex;
+  gap: 1rem;
+}
+
+.managedVenues {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
