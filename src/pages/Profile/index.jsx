@@ -3,6 +3,9 @@ import { fetchProfile } from "../../api/fetchProfile";
 import { updateAvatar } from "../../api/updateAvatar";
 import { fetchVenues } from "../../api/fetchVenues";
 import { fetchBooking } from "../../api/fetchBooking";
+import { ProfileCard } from "../../components/profileCard";
+import { Dialog } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 import styles from "./Profile.module.css";
 
 const UserProfile = () => {
@@ -12,8 +15,9 @@ const UserProfile = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [venueDetails, setVenueDetails] = useState([]);
-  const [currentVenueId, setCurrentVenueId] = useState(null);
   const [bookingDetails, setBookingDetails] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentVenue, setCurrentVenue] = useState();
 
   const handleAvatarSubmit = (event) => {
     event.preventDefault();
@@ -61,7 +65,7 @@ const UserProfile = () => {
         })
         .catch((err) => console.error(err));
     }
-    console.log(bookingDetails);
+    console.log(venues);
   }, []);
 
   if (!user) {
@@ -109,7 +113,7 @@ const UserProfile = () => {
             <h2>Active Bookings</h2>
             {bookingDetails.length > 0 ? (
               bookingDetails.map((booking) => (
-                <div key={booking.id}>
+                <ProfileCard key={booking.id}>
                   <p>{booking.details}</p>
                   <p>Venue: {booking.venue.name}</p>
                   <p>Guests: {booking.guests}</p>
@@ -129,7 +133,7 @@ const UserProfile = () => {
                       day: "numeric",
                     })}
                   </p>
-                </div>
+                </ProfileCard>
               ))
             ) : (
               <p>No active bookings</p>
@@ -138,61 +142,81 @@ const UserProfile = () => {
         )}
 
         {user.venueManager && (
-          <>
-            <div className={styles.managedVenues}>
-              <h2>Managed Venues</h2>{" "}
+          <div>
+            <h2>Managed Venues</h2>{" "}
+            <div className={styles.profileGrid}>
               {venues.length > 0 ? (
                 venues.map((venue, index) => (
-                  <div className={styles.venue} key={index}>
-                    <div>
-                      <img src={venue.media[0]} alt={venue.name} />
-                      <p>{venue.name}</p>
-                    </div>
-
-                    {currentVenueId === venue.id ? (
-                      <button onClick={() => setCurrentVenueId(null)}>
-                        Hide Bookings
-                      </button>
-                    ) : (
-                      <button onClick={() => setCurrentVenueId(venue.id)}>
+                  <ProfileCard key={index}>
+                    <img
+                      className={styles.cardImage}
+                      src={venue.media[0]}
+                      alt={venue.name}
+                    />
+                    <h3>{venue.name}</h3>
+                    {venue.bookings.length ? (
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          setCurrentVenue(venue);
+                          setIsModalOpen(true);
+                        }}
+                      >
                         View Bookings
                       </button>
+                    ) : (
+                      <p>No Bookings</p>
                     )}
-                    {currentVenueId === venue.id &&
-                      venue.bookings.map((booking) => (
-                        <div className={styles.venueBookings} key={booking.id}>
-                          <p>Guests: {booking.guests}</p>
-                          <p>
-                            Date from:{" "}
-                            {new Date(booking.dateFrom).toLocaleDateString(
-                              "no-NO",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
-                          </p>
-                          <p>
-                            Date to:{" "}
-                            {new Date(booking.dateTo).toLocaleDateString(
-                              "no-NO",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
-                          </p>
-                        </div>
-                      ))}
-                  </div>
+                    {isModalOpen ? (
+                      <Dialog
+                        isOpen={isModalOpen}
+                        onDismiss={() => setIsModalOpen(false)}
+                      >
+                        <h2>Bookings for {currentVenue.name}</h2>
+                        {currentVenue.bookings.map((booking) => (
+                          <div className={styles.venueBooking} key={booking.id}>
+                            <p>Guests: {booking.guests}</p>
+                            <p>
+                              Date from:{" "}
+                              {new Date(booking.dateFrom).toLocaleDateString(
+                                "no-NO",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
+                            </p>
+                            <p>
+                              Date to:{" "}
+                              {new Date(booking.dateTo).toLocaleDateString(
+                                "no-NO",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
+                            </p>
+                          </div>
+                        ))}
+                        <button
+                          className="btn"
+                          onClick={() => setIsModalOpen(false)}
+                        >
+                          Close
+                        </button>
+                      </Dialog>
+                    ) : (
+                      ""
+                    )}
+                  </ProfileCard>
                 ))
               ) : (
                 <p>No managed venues</p>
               )}
             </div>
-          </>
+          </div>
         )}
       </div>
     </main>
