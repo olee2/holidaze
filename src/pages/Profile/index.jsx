@@ -13,11 +13,11 @@ import styles from "./Profile.module.css";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
-  const [bookings, setBookings] = useState([]);
+
   const [venues, setVenues] = useState([]);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
-  const [venueDetails, setVenueDetails] = useState([]);
+
   const [bookingDetails, setBookingDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentVenue, setCurrentVenue] = useState();
@@ -49,14 +49,9 @@ const UserProfile = () => {
             Promise.all(profile.venues.map((venue) => fetchVenues(venue.id)))
               .then((venuesData) => {
                 setVenues(venuesData);
-                setVenueDetails(
-                  venuesData.map((venueData) => venueData.bookings)
-                );
               })
               .catch((err) => console.error(err));
           } else {
-            setBookings(profile.bookings);
-            // Fetch each booking details here
             Promise.all(
               profile.bookings.map((booking) => fetchBooking(booking.id))
             )
@@ -68,7 +63,6 @@ const UserProfile = () => {
         })
         .catch((err) => console.error(err));
     }
-    console.log(bookingDetails);
   }, []);
 
   if (!user) {
