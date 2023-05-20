@@ -138,6 +138,21 @@ p {
   color: #fff;
 }
 
+.btn-link {
+  text-decoration: none;
+  padding: 0rem;
+  border: none;
+  color: var(--secondary-color);
+  border-radius: 5px;
+  transition: 0.2s;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
 .flex {
   display: flex;
   flex-wrap: wrap;
@@ -165,4 +180,8 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.inner-container {
+  gap: 3rem;
 }

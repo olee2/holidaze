@@ -65,7 +65,7 @@ const UserProfile = () => {
         })
         .catch((err) => console.error(err));
     }
-    console.log(venues);
+    console.log(bookingDetails);
   }, []);
 
   if (!user) {
@@ -82,67 +82,108 @@ const UserProfile = () => {
       <div className="inner-container">
         <div className={styles.profile}>
           {" "}
-          <h1>{user.name}</h1>
+          <div className={styles.nameContainer}>
+            {" "}
+            <h1>{user.name}</h1>
+            <p>{user.venueManager ? "Venues Manager" : ""}</p>
+          </div>
           <img src={user.avatar} alt={user.name} />
           {isEditingAvatar ? (
-            <form onSubmit={handleAvatarSubmit}>
-              <label>
-                New Avatar URL:
+            <form className={styles.avatarForm} onSubmit={handleAvatarSubmit}>
+              <div className={styles.avatarInputContainer}>
+                {" "}
+                <label className={styles.avatarLabel}>New Avatar URL:</label>
                 <input
+                  className={styles.avatarInput}
                   type="url"
                   value={avatarUrl}
                   onChange={(event) => setAvatarUrl(event.target.value)}
                   required
                 />
-              </label>
-              <button type="submit">Update Avatar</button>
-              <button type="button" onClick={() => setIsEditingAvatar(false)}>
-                Cancel
-              </button>
+              </div>
+
+              <div className={styles.avatarButtons}>
+                {" "}
+                <button className="btn" type="submit">
+                  Update Avatar
+                </button>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => setIsEditingAvatar(false)}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           ) : (
-            <button className="btn" onClick={() => setIsEditingAvatar(true)}>
+            <button
+              className="btn-link"
+              onClick={() => setIsEditingAvatar(true)}
+            >
               Change Avatar
             </button>
           )}
         </div>
 
         {!user.venueManager && (
-          <>
+          <div className={styles.venuesContainer}>
             {" "}
             <h2>Active Bookings</h2>
-            {bookingDetails.length > 0 ? (
-              bookingDetails.map((booking) => (
-                <ProfileCard key={booking.id}>
-                  <p>{booking.details}</p>
-                  <p>Venue: {booking.venue.name}</p>
-                  <p>Guests: {booking.guests}</p>
-                  <p>
-                    Date from:{" "}
-                    {new Date(booking.dateFrom).toLocaleDateString("no-NO", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <p>
-                    Date to:{" "}
-                    {new Date(booking.dateTo).toLocaleDateString("no-NO", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                </ProfileCard>
-              ))
-            ) : (
-              <p>No active bookings</p>
-            )}
-          </>
+            <div className={styles.profileGrid}>
+              {" "}
+              {bookingDetails.length > 0 ? (
+                bookingDetails.map((booking) => (
+                  <ProfileCard key={booking.id}>
+                    <img
+                      className={styles.cardImage}
+                      src={booking.venue.media[0]}
+                      alt={booking.venue.name}
+                    />
+                    <div className={styles.profileCardContent}>
+                      <div>
+                        {" "}
+                        <h3> {booking.venue.name}</h3>
+                        <p>{booking.venue.description}</p>
+                      </div>{" "}
+                      <p>Guests: {booking.guests}</p>
+                      <div>
+                        {" "}
+                        <p>
+                          Date from:{" "}
+                          {new Date(booking.dateFrom).toLocaleDateString(
+                            "no-NO",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </p>
+                        <p>
+                          Date to:{" "}
+                          {new Date(booking.dateTo).toLocaleDateString(
+                            "no-NO",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </ProfileCard>
+                ))
+              ) : (
+                <p>No active bookings</p>
+              )}
+            </div>
+          </div>
         )}
 
         {user.venueManager && (
-          <div>
+          <div className={styles.venuesContainer}>
             <h2>Managed Venues</h2>{" "}
             <div className={styles.profileGrid}>
               {venues.length > 0 ? (
@@ -153,59 +194,71 @@ const UserProfile = () => {
                       src={venue.media[0]}
                       alt={venue.name}
                     />
-                    <h3>{venue.name}</h3>
-                    {venue.bookings.length ? (
-                      <button
-                        className="btn"
-                        onClick={() => {
-                          setCurrentVenue(venue);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        View Bookings
-                      </button>
-                    ) : (
-                      <p>No Bookings</p>
-                    )}
+                    <div className={styles.profileCardContent}>
+                      <h3>{venue.name}</h3>
+                      <div className={styles.buttonContainer}>
+                        {venue.bookings.length ? (
+                          <button
+                            className="btn-link"
+                            onClick={() => {
+                              setCurrentVenue(venue);
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            View Bookings
+                          </button>
+                        ) : (
+                          <p>No Bookings</p>
+                        )}
+                        <button className="btn-link">Edit Venue</button>
+                      </div>
+                    </div>
+
                     {isModalOpen ? (
                       <Dialog
                         isOpen={isModalOpen}
                         onDismiss={() => setIsModalOpen(false)}
                       >
-                        <h2>Bookings for {currentVenue.name}</h2>
-                        {currentVenue.bookings.map((booking) => (
-                          <div className={styles.venueBooking} key={booking.id}>
-                            <p>Guests: {booking.guests}</p>
-                            <p>
-                              Date from:{" "}
-                              {new Date(booking.dateFrom).toLocaleDateString(
-                                "no-NO",
-                                {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                }
-                              )}
-                            </p>
-                            <p>
-                              Date to:{" "}
-                              {new Date(booking.dateTo).toLocaleDateString(
-                                "no-NO",
-                                {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                }
-                              )}
-                            </p>
-                          </div>
-                        ))}
-                        <button
-                          className="btn"
-                          onClick={() => setIsModalOpen(false)}
-                        >
-                          Close
-                        </button>
+                        <div className={styles.venueBookingsContainer}>
+                          {" "}
+                          <h2>Bookings for {currentVenue.name}</h2>
+                          {currentVenue.bookings.map((booking) => (
+                            <div
+                              className={styles.venueBooking}
+                              key={booking.id}
+                            >
+                              <p>Guests: {booking.guests}</p>
+                              <p>
+                                Date from:{" "}
+                                {new Date(booking.dateFrom).toLocaleDateString(
+                                  "no-NO",
+                                  {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }
+                                )}
+                              </p>
+                              <p>
+                                Date to:{" "}
+                                {new Date(booking.dateTo).toLocaleDateString(
+                                  "no-NO",
+                                  {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }
+                                )}
+                              </p>
+                            </div>
+                          ))}
+                          <button
+                            className="btn"
+                            onClick={() => setIsModalOpen(false)}
+                          >
+                            Close
+                          </button>
+                        </div>
                       </Dialog>
                     ) : (
                       ""
