@@ -22,9 +22,10 @@
 }
 
 .venueBookingsContainer {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -117,4 +118,9 @@
 .avatarButtons button {
   width: 150px;
   padding: 0.5rem 0;
+}
+
+.dividerLine {
+  background-color: var(--primary-color);
+  height: 1px;
 }

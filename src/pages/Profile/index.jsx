@@ -4,8 +4,11 @@ import { updateAvatar } from "../../api/updateAvatar";
 import { fetchVenues } from "../../api/fetchVenues";
 import { fetchBooking } from "../../api/fetchBooking";
 import { ProfileCard } from "../../components/profileCard";
-import { Dialog } from "@reach/dialog";
-import "@reach/dialog/styles.css";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import styles from "./Profile.module.css";
 
 const UserProfile = () => {
@@ -125,11 +128,10 @@ const UserProfile = () => {
             </button>
           )}
         </div>
-
+        <div className={styles.dividerLine}></div>
         {!user.venueManager && (
           <div className={styles.venuesContainer}>
-            {" "}
-            <h2>Active Bookings</h2>
+            <div className={styles.dividerLine}></div> <h2>Active Bookings</h2>
             <div className={styles.profileGrid}>
               {" "}
               {bookingDetails.length > 0 ? (
@@ -214,51 +216,53 @@ const UserProfile = () => {
                       </div>
                     </div>
 
-                    {isModalOpen ? (
+                    {isModalOpen && currentVenue === venue ? (
                       <Dialog
-                        isOpen={isModalOpen}
-                        onDismiss={() => setIsModalOpen(false)}
+                        open={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
                       >
-                        <div className={styles.venueBookingsContainer}>
-                          {" "}
-                          <h2>Bookings for {currentVenue.name}</h2>
-                          {currentVenue.bookings.map((booking) => (
-                            <div
-                              className={styles.venueBooking}
-                              key={booking.id}
-                            >
-                              <p>Guests: {booking.guests}</p>
-                              <p>
-                                Date from:{" "}
-                                {new Date(booking.dateFrom).toLocaleDateString(
-                                  "no-NO",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  }
-                                )}
-                              </p>
-                              <p>
-                                Date to:{" "}
-                                {new Date(booking.dateTo).toLocaleDateString(
-                                  "no-NO",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  }
-                                )}
-                              </p>
-                            </div>
-                          ))}
-                          <button
-                            className="btn"
-                            onClick={() => setIsModalOpen(false)}
-                          >
+                        <DialogTitle>
+                          Bookings for {currentVenue && currentVenue.name}
+                        </DialogTitle>
+                        <DialogContent>
+                          <div className={styles.venueBookingsContainer}>
+                            {" "}
+                            {currentVenue &&
+                              currentVenue.bookings.map((booking) => (
+                                <div
+                                  className={styles.venueBooking}
+                                  key={booking.id}
+                                >
+                                  <p>Guests: {booking.guests}</p>
+                                  <p>
+                                    Date from:{" "}
+                                    {new Date(
+                                      booking.dateFrom
+                                    ).toLocaleDateString("no-NO", {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    })}
+                                  </p>
+                                  <p>
+                                    Date to:{" "}
+                                    {new Date(
+                                      booking.dateTo
+                                    ).toLocaleDateString("no-NO", {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    })}
+                                  </p>
+                                </div>
+                              ))}
+                          </div>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => setIsModalOpen(false)}>
                             Close
-                          </button>
-                        </div>
+                          </Button>
+                        </DialogActions>
                       </Dialog>
                     ) : (
                       ""
