@@ -58,7 +58,7 @@ export const Login = () => {
       } else if (response.accessToken) {
         localStorage.setItem("user", JSON.stringify(response));
 
-        navigate("/");
+        navigate("/profile");
       }
     } catch (error) {
       setErrorMessages([error.message]);

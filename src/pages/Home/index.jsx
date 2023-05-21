@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import Hero from "../../components/Hero";
 import styles from "./Home.module.css";
 import { fetchVenues } from "../../api/fetchVenues";
 import { Card } from "../../components/Card";
 import { Search } from "../../components/Search";
 import { searchAlgo } from "../../utils/searchAlgo";
-import { isLoggedIn } from "../../utils/isLoggedIn";
 
 const Home = () => {
   const [venues, setVenues] = useState([]);
@@ -14,46 +13,26 @@ const Home = () => {
   const [loader, setLoader] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
 
   const handleQuery = (event) => {
     setQuery(event.target.value.replace(/[^a-zA-Z\d]/gi, "").toLowerCase());
   };
 
   useEffect(() => {
-    if (!isLoggedIn()) {
-      navigate("/login");
-    }
-    const intervalId = setInterval(() => {
-      if (!isLoggedIn()) {
-        navigate("/login");
-      }
-    }, 10000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [navigate]);
-
-  useEffect(() => {
     const handleVenues = async () => {
-      const storedVenues = JSON.parse(localStorage.getItem("venues"));
       setLoader(true);
-      if (!storedVenues) {
-        try {
-          const data = await fetchVenues();
-          setVenues(data);
-          localStorage.setItem("venues", JSON.stringify(data));
-          setLoader(false);
-        } catch (err) {
-          console.log(err);
-          setError(true);
-        }
-      } else {
-        setVenues(storedVenues);
+
+      try {
+        const data = await fetchVenues();
+        setVenues(data);
+        localStorage.setItem("venues", JSON.stringify(data));
         setLoader(false);
+      } catch (err) {
+        console.log(err);
+        setError(true);
       }
     };
+
     handleVenues();
   }, []);
 

@@ -8,7 +8,7 @@ export const AuthButton = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/");
   };
 
   const handleLogin = () => {

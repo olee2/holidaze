@@ -10,6 +10,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import styles from "./Profile.module.css";
+import { isLoggedIn } from "../../utils/isLoggedIn";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -21,6 +23,7 @@ const UserProfile = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentVenue, setCurrentVenue] = useState();
+  const navigate = useNavigate();
 
   const handleAvatarSubmit = (event) => {
     event.preventDefault();
@@ -38,6 +41,21 @@ const UserProfile = () => {
         .catch((err) => console.error(err));
     }
   };
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+    }
+    const intervalId = setInterval(() => {
+      if (!isLoggedIn()) {
+        navigate("/login");
+      }
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [navigate]);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
