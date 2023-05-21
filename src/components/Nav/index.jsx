@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import hamburger from "../../assets/hamburger.svg";
 import styles from "./Nav.module.css";
 import { AuthButton } from "../AuthButton";
-import { isLoggedIn } from "../../utils/isLoggedIn";
 
 function Nav() {
   const location = useLocation();
