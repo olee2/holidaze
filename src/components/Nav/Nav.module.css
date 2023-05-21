@@ -21,6 +21,11 @@ nav {
   flex: 1;
 }
 
+.navLinks {
+  display: flex;
+  gap: 2rem;
+}
+
 .navLink {
   text-decoration: none;
   color: #0000008c;
@@ -67,6 +72,11 @@ nav {
     gap: 1rem;
     height: 0;
     overflow: hidden;
+  }
+
+  .navLinks {
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .show {

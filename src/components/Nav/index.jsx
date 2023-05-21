@@ -33,18 +33,14 @@ function Nav() {
 
       <div className={`${styles.navContainer} ${display && styles.show}`}>
         <div className={styles.linkContainer}>
-          <div>
+          <div className={styles.navLinks}>
             {" "}
             <Link className={styles.navLink} to="/">
               Home
             </Link>
-            {isLoggedIn() ? (
-              <Link className={styles.navLink} to="/profile">
-                Profile
-              </Link>
-            ) : (
-              ""
-            )}
+            <Link className={styles.navLink} to="/profile">
+              Profile
+            </Link>
           </div>
 
           <AuthButton />
