@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchVenues } from "../../api/fetchVenues";
 import styles from "./Venue.module.css";
 import ImageCarousel from "../../components/ImageCarousel";
-import AvailableDates from "../../components/AvailableDates";
+import BookingForm from "../../components/BookingForm";
 
 const Venue = () => {
   const [venue, setVenue] = useState(null);
@@ -48,7 +48,7 @@ const Venue = () => {
           </div>
           <div className={styles.availableDates}>
             <h2>Available Dates</h2>
-            <AvailableDates bookings={venue.bookings} />
+            <BookingForm bookings={venue.bookings} venueId={id} />
           </div>
         </div>
       </div>

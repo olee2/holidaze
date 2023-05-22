@@ -158,7 +158,9 @@ const UserProfile = () => {
                       <div>
                         {" "}
                         <h3> {booking.venue.name}</h3>
-                        <p>{booking.venue.description}</p>
+                        <p className={styles.profileBookingDescription}>
+                          {booking.venue.description}
+                        </p>
                       </div>{" "}
                       <p>Guests: {booking.guests}</p>
                       <div>
