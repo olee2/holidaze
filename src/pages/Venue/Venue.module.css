@@ -9,6 +9,19 @@
   border-radius: 50px;
 }
 
-.availableDates {
-  flex: 1;
+.availableDates h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.venueContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+@media screen and (max-width: 700px) {
+  .venueContainer {
+    flex-direction: column;
+  }
 }

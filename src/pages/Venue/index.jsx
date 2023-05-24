@@ -9,12 +9,20 @@ const Venue = () => {
   const [venue, setVenue] = useState(null);
   const { id } = useParams();
 
+  const [bookings, setBookings] = useState([]);
+
+  const onBookingMade = (newBooking) => {
+    setBookings((prevBookings) => [...prevBookings, newBooking]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const fetchedVenue = await fetchVenues(id);
       setVenue(fetchedVenue);
+      setBookings(fetchedVenue.bookings);
     };
     fetchData();
+    console.log(venue);
   }, [id]);
 
   if (!venue) {
@@ -27,7 +35,7 @@ const Venue = () => {
         <div>
           <ImageCarousel images={venue.media} />
         </div>
-        <div className="flex justify-between">
+        <div className={styles.venueContainer}>
           <div className="flex2">
             <h1 className={styles.name}>{venue.name}</h1>
             <p className={styles.description}>{venue.description}</p>
@@ -40,15 +48,29 @@ const Venue = () => {
 
             <div className={styles.location}>
               <h2>Location</h2>
-              <p>Address: {venue.location.address}</p>
-              <p>City: {venue.location.city}</p>
-              <p>Zip: {venue.location.zip}</p>
-              <p>Country: {venue.location.country}</p>
+              {!venue.location.address &&
+              !venue.location.city &&
+              !venue.location.zip &&
+              !venue.location.country ? (
+                "Location unknown"
+              ) : (
+                <>
+                  <p>Address: {venue.location.address}</p>
+                  <p>City: {venue.location.city}</p>
+                  <p>Zip: {venue.location.zip}</p>
+                  <p>Country: {venue.location.country}</p>
+                </>
+              )}
             </div>
           </div>
           <div className={styles.availableDates}>
             <h2>Available Dates</h2>
-            <BookingForm bookings={venue.bookings} venueId={id} />
+            <BookingForm
+              bookings={bookings}
+              venueId={id}
+              onBookingMade={onBookingMade}
+              maxGuests={venue.maxGuests}
+            />
           </div>
         </div>
       </div>

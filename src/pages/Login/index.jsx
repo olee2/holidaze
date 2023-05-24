@@ -3,8 +3,9 @@ import { loginUser } from "../../api/loginUser";
 import styles from "../Register/Register.module.css";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = (id) => {
   const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({ email: "", password: "" });
   const [errorMessages, setErrorMessages] = useState({
     email: "",
