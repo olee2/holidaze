@@ -22,7 +22,6 @@ const Venue = () => {
       setBookings(fetchedVenue.bookings);
     };
     fetchData();
-    console.log(venue);
   }, [id]);
 
   if (!venue) {
