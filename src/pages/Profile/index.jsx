@@ -10,20 +10,22 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import styles from "./Profile.module.css";
-import { isLoggedIn } from "../../utils/isLoggedIn";
 import { useNavigate } from "react-router-dom";
+import ChangeAvatarForm from "../../components/ChangeAvatarForm";
+import CreateVenueForm from "../../components/CreateVenueModal";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
-
   const [venues, setVenues] = useState([]);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
-
   const [bookingDetails, setBookingDetails] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentVenue, setCurrentVenue] = useState();
-  const navigate = useNavigate();
+  const [isCreateVenueOpen, setIsCreateVenueOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [venueDialogOpen, setVenueDialogOpen] = useState(false);
+  const [selectedVenue, setSelectedVenue] = useState(null);
 
   const handleAvatarSubmit = (event) => {
     event.preventDefault();
@@ -35,6 +37,7 @@ const UserProfile = () => {
             accessToken: user.accessToken,
           };
           setUser(updatedUserWithToken);
+          setAvatarUrl("");
           setIsEditingAvatar(false);
           localStorage.setItem("user", JSON.stringify(updatedUserWithToken));
         })
@@ -43,26 +46,12 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    if (!isLoggedIn()) {
-      navigate("/login");
-    }
-    const intervalId = setInterval(() => {
-      if (!isLoggedIn()) {
-        navigate("/login");
-      }
-    }, 10000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [navigate]);
-
-  useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser && storedUser.name) {
       fetchProfile(storedUser.name)
         .then((profile) => {
           setUser(storedUser);
+          setLoading(false);
           if (storedUser.venueManager) {
             Promise.all(profile.venues.map((venue) => fetchVenues(venue.id)))
               .then((venuesData) => {
@@ -76,14 +65,27 @@ const UserProfile = () => {
               .then((bookingData) => {
                 setBookingDetails(bookingData);
               })
-              .catch((err) => console.error(err));
+              .catch((err) => {
+                console.error(err);
+                setLoading(false);
+              });
           }
         })
         .catch((err) => console.error(err));
     }
   }, []);
 
-  if (!user) {
+  const openVenueDialog = (venue) => {
+    console.log(venue);
+
+    setVenueDialogOpen(true);
+  };
+
+  const closeVenueDialog = () => {
+    setVenueDialogOpen(false);
+  };
+
+  if (loading) {
     return (
       <main>
         <div className="inner-container">Loading...</div>
@@ -104,33 +106,12 @@ const UserProfile = () => {
           </div>
           <img src={user.avatar} alt={user.name} />
           {isEditingAvatar ? (
-            <form className={styles.avatarForm} onSubmit={handleAvatarSubmit}>
-              <div className={styles.avatarInputContainer}>
-                {" "}
-                <label className={styles.avatarLabel}>New Avatar URL:</label>
-                <input
-                  className={styles.avatarInput}
-                  type="url"
-                  value={avatarUrl}
-                  onChange={(event) => setAvatarUrl(event.target.value)}
-                  required
-                />
-              </div>
-
-              <div className={styles.avatarButtons}>
-                {" "}
-                <button className="btn" type="submit">
-                  Update Avatar
-                </button>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={() => setIsEditingAvatar(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <ChangeAvatarForm
+              avatarUrl={avatarUrl}
+              setAvatarUrl={setAvatarUrl}
+              setIsEditingAvatar={setIsEditingAvatar}
+              handleAvatarSubmit={handleAvatarSubmit}
+            />
           ) : (
             <button
               className="btn-link"
@@ -201,10 +182,21 @@ const UserProfile = () => {
         {user.venueManager && (
           <div className={styles.venuesContainer}>
             <h2>Managed Venues</h2>{" "}
+            <button
+              className="btn-link"
+              onClick={() => setIsCreateVenueOpen(true)}
+            >
+              Create Venue
+            </button>
+            <CreateVenueForm
+              open={isCreateVenueOpen}
+              onClose={() => setIsCreateVenueOpen(false)}
+              title={"Create new venue"}
+            />
             <div className={styles.profileGrid}>
               {venues.length > 0 ? (
-                venues.map((venue, index) => (
-                  <ProfileCard key={index}>
+                venues.map((venue) => (
+                  <ProfileCard key={venue.id}>
                     <img
                       className={styles.cardImage}
                       src={venue.media[0]}
@@ -226,7 +218,18 @@ const UserProfile = () => {
                         ) : (
                           <p>No Bookings</p>
                         )}
-                        <button className="btn-link">Edit Venue</button>
+                        <button
+                          onClick={() => openVenueDialog(venue)}
+                          className="btn-link"
+                        >
+                          Edit Venue
+                        </button>
+                        <CreateVenueForm
+                          open={venueDialogOpen}
+                          onClose={closeVenueDialog}
+                          venue={venue}
+                          update
+                        />
                       </div>
                     </div>
 
