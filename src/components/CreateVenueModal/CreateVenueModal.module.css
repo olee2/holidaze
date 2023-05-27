@@ -4,3 +4,28 @@
   padding: 1rem 0;
   gap: 1.5rem;
 }
+
+.deleteBtn {
+  align-self: flex-start;
+  margin-left: 24px;
+}
+
+.deleteBtn:hover {
+  color: red;
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btnContainer button {
+  flex: 1;
+}
+
+.mediaContainer {
+  display: flex;
+  gap: 0.5rem;
+}

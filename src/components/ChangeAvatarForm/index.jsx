@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "../../pages/Profile/Profile.module.css";
-import { updateAvatar } from "../../api/updateAvatar";
 
 const ChangeAvatarForm = ({
   avatarUrl,

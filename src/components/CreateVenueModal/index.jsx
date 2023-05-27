@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Button,
   TextField,
   FormControlLabel,
   Checkbox,
@@ -14,6 +13,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createVenue } from "../../api/createVenue";
 import { updateVenue } from "../../api/updateVenue";
+import { deleteVenue } from "../../api/deleteVenue";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -21,11 +21,14 @@ const schema = yup.object().shape({
   media: yup.array().of(yup.string().url("Invalid URL")),
   price: yup.number().required("Price is required"),
   maxGuests: yup.number().required("Max Guests is required"),
+  meta: yup.object().shape({
+    wifi: yup.boolean(),
+    parking: yup.boolean(),
+    breakfast: yup.boolean(),
+    pets: yup.boolean(),
+  }),
   rating: yup.number(),
-  wifi: yup.boolean(),
-  parking: yup.boolean(),
-  breakfast: yup.boolean(),
-  pets: yup.boolean(),
+
   location: yup.object().shape({
     address: yup.string(),
     city: yup.string(),
@@ -37,50 +40,74 @@ const schema = yup.object().shape({
   }),
 });
 
-const CreateVenueForm = ({ open, onClose, venue, update = false, title }) => {
-  console.log(update);
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: venue || {
-      name: "",
-      description: "",
-      media: [],
-      price: 0,
-      maxGuests: 0,
-      rating: 0,
+const CreateVenueForm = ({
+  open,
+  onClose,
+  venue,
+  update = false,
+  title,
+  onVenueChange,
+}) => {
+  const defaultVenue = {
+    name: "",
+    description: "",
+    media: [],
+    price: 0,
+    maxGuests: 0,
+    rating: 0,
+    meta: {
       wifi: false,
       parking: false,
       breakfast: false,
       pets: false,
-      location: {
-        address: "",
-        city: "",
-        zip: "",
-        country: "",
-        continent: "",
-        lat: 0,
-        lng: 0,
-      },
     },
+    location: {
+      address: "",
+      city: "",
+      zip: "",
+      country: "",
+      continent: "",
+      lat: 0,
+      lng: 0,
+    },
+  };
+  const currentVenue = venue || defaultVenue;
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: currentVenue,
   });
 
+  useEffect(() => {
+    reset(venue || defaultVenue);
+  }, [venue]);
+
   const onSubmit = async (data) => {
+    let response;
     if (update) {
-      console.log(venue);
-      //updateVenue(data, venue.id);
+      response = await updateVenue(data, venue.id);
     } else {
-      console.log(data);
-      const response = await createVenue(data);
-      console.log(response);
+      response = await createVenue(data);
     }
 
-    //reset();
+    if (response) {
+      reset();
+      onClose();
+      onVenueChange();
+    }
+  };
+
+  const handleDeleteVenue = async (id) => {
+    await deleteVenue(id);
+    onVenueChange();
+    onClose();
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -91,6 +118,12 @@ const CreateVenueForm = ({ open, onClose, venue, update = false, title }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
+      <button
+        onClick={() => handleDeleteVenue(currentVenue.id)}
+        className={`btn-link ${styles.deleteBtn}`}
+      >
+        Delete Venue
+      </button>
       <DialogContent>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <TextField
@@ -108,16 +141,20 @@ const CreateVenueForm = ({ open, onClose, venue, update = false, title }) => {
             helperText={errors.description?.message}
           />
           {fields.map((item, index) => (
-            <div key={item.id}>
+            <div className={styles.mediaContainer} key={item.id}>
               <TextField
                 {...register(`media.${index}`)}
                 label={`Media URL ${index + 1}`}
                 defaultValue={item}
               />
-              <Button onClick={() => remove(index)}>Remove</Button>
+              <button className="btn-link" onClick={() => remove(index)}>
+                Remove
+              </button>
             </div>
           ))}
-          <Button onClick={() => append("")}>Add Media</Button>
+          <button className="btn-link" onClick={() => append("")}>
+            Add Media
+          </button>
           <TextField
             {...register("price")}
             label="Price"
@@ -142,28 +179,40 @@ const CreateVenueForm = ({ open, onClose, venue, update = false, title }) => {
             helperText={errors.rating?.message}
           />
           <FormControlLabel
-            control={<Checkbox {...register("wifi")} />}
+            control={
+              <Checkbox
+                checked={!!watch("meta.wifi")}
+                onChange={(e) => setValue("meta.wifi", e.target.checked)}
+              />
+            }
             label="Wifi"
-            error={!!errors.wifi}
-            helperText={errors.wifi?.message}
           />
           <FormControlLabel
-            control={<Checkbox {...register("parking")} />}
+            control={
+              <Checkbox
+                checked={!!watch("meta.parking")}
+                onChange={(e) => setValue("meta.parking", e.target.checked)}
+              />
+            }
             label="Parking"
-            error={!!errors.parking}
-            helperText={errors.parking?.message}
           />
           <FormControlLabel
-            control={<Checkbox {...register("breakfast")} />}
+            control={
+              <Checkbox
+                checked={!!watch("meta.breakfast")}
+                onChange={(e) => setValue("meta.breakfast", e.target.checked)}
+              />
+            }
             label="Breakfast"
-            error={!!errors.breakfast}
-            helperText={errors.breakfast?.message}
           />
           <FormControlLabel
-            control={<Checkbox {...register("pets")} />}
+            control={
+              <Checkbox
+                checked={!!watch("meta.pets")}
+                onChange={(e) => setValue("meta.pets", e.target.checked)}
+              />
+            }
             label="Pets"
-            error={!!errors.pets}
-            helperText={errors.pets?.message}
           />
           <TextField
             {...register("location.address")}
@@ -209,7 +258,15 @@ const CreateVenueForm = ({ open, onClose, venue, update = false, title }) => {
             error={!!errors.location?.lng}
             helperText={errors.location?.lng?.message}
           />
-          <Button type="submit">Save</Button>
+          <div className={styles.btnContainer}>
+            {" "}
+            <button className="btn" type="submit">
+              Save
+            </button>
+            <button className="btn-link" type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

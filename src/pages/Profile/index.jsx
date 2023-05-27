@@ -10,9 +10,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import styles from "./Profile.module.css";
-import { useNavigate } from "react-router-dom";
 import ChangeAvatarForm from "../../components/ChangeAvatarForm";
 import CreateVenueForm from "../../components/CreateVenueModal";
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -43,6 +43,19 @@ const UserProfile = () => {
         })
         .catch((err) => console.error(err));
     }
+  };
+
+  const refreshVenues = async () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && storedUser.name) {
+    }
+    fetchProfile(storedUser.name).then((profile) => {
+      Promise.all(profile.venues.map((venue) => fetchVenues(venue.id))).then(
+        (venuesData) => {
+          setVenues(venuesData);
+        }
+      );
+    });
   };
 
   useEffect(() => {
@@ -76,8 +89,7 @@ const UserProfile = () => {
   }, []);
 
   const openVenueDialog = (venue) => {
-    console.log(venue);
-
+    setSelectedVenue(venue);
     setVenueDialogOpen(true);
   };
 
@@ -192,6 +204,7 @@ const UserProfile = () => {
               open={isCreateVenueOpen}
               onClose={() => setIsCreateVenueOpen(false)}
               title={"Create new venue"}
+              onVenueChange={refreshVenues}
             />
             <div className={styles.profileGrid}>
               {venues.length > 0 ? (
@@ -203,7 +216,10 @@ const UserProfile = () => {
                       alt={venue.name}
                     />
                     <div className={styles.profileCardContent}>
-                      <h3>{venue.name}</h3>
+                      <Link to={`/venue/${venue.id}`} className={styles.h3Link}>
+                        <h3>{venue.name}</h3>
+                      </Link>
+
                       <div className={styles.buttonContainer}>
                         {venue.bookings.length ? (
                           <button
@@ -218,6 +234,7 @@ const UserProfile = () => {
                         ) : (
                           <p>No Bookings</p>
                         )}
+
                         <button
                           onClick={() => openVenueDialog(venue)}
                           className="btn-link"
@@ -225,10 +242,12 @@ const UserProfile = () => {
                           Edit Venue
                         </button>
                         <CreateVenueForm
+                          title={"Edit Venue"}
                           open={venueDialogOpen}
                           onClose={closeVenueDialog}
-                          venue={venue}
+                          venue={selectedVenue}
                           update
+                          onVenueChange={refreshVenues}
                         />
                       </div>
                     </div>

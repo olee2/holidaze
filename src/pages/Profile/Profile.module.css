@@ -132,3 +132,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.h3Link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.h3Link:hover {
+  text-decoration: underline;
+}
