@@ -87,6 +87,7 @@ const CreateVenueForm = ({
 
   useEffect(() => {
     reset(venue || defaultVenue);
+    // eslint-disable-next-line
   }, [venue]);
 
   const onSubmit = async (data) => {
