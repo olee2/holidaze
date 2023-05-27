@@ -119,6 +119,7 @@ const CreateVenueForm = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <button
+        type="button"
         onClick={() => handleDeleteVenue(currentVenue.id)}
         className={`btn-link ${styles.deleteBtn}`}
       >
@@ -147,12 +148,16 @@ const CreateVenueForm = ({
                 label={`Media URL ${index + 1}`}
                 defaultValue={item}
               />
-              <button className="btn-link" onClick={() => remove(index)}>
+              <button
+                type="button"
+                className="btn-link"
+                onClick={() => remove(index)}
+              >
                 Remove
               </button>
             </div>
           ))}
-          <button className="btn-link" onClick={() => append("")}>
+          <button type="button" className="btn-link" onClick={() => append("")}>
             Add Media
           </button>
           <TextField
