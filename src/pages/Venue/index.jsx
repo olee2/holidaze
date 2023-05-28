@@ -54,9 +54,10 @@ const Venue = () => {
         <div>
           <ImageCarousel images={venue.media} />
         </div>
+        <h1 className={styles.name}>{venue.name}</h1>
+        <div className={styles.dividerLine}></div>
         <div className={styles.venueContainer}>
-          <div className="flex2">
-            <h1 className={styles.name}>{venue.name}</h1>
+          <div className={styles.venueInfoContainer}>
             <p className={styles.description}>{venue.description}</p>
             <div className="flex  mtb">
               {" "}
@@ -64,22 +65,31 @@ const Venue = () => {
               <p className={styles.tag}>Max Guests: {venue.maxGuests}</p>
               <p className={styles.tag}>Rating: {venue.rating}</p>
             </div>
-
-            <div className={styles.location}>
-              <h2>Location</h2>
-              {!venue.location.address &&
-              !venue.location.city &&
-              !venue.location.zip &&
-              !venue.location.country ? (
-                "Location unknown"
-              ) : (
-                <>
-                  <p>Address: {venue.location.address}</p>
-                  <p>City: {venue.location.city}</p>
-                  <p>Zip: {venue.location.zip}</p>
-                  <p>Country: {venue.location.country}</p>
-                </>
-              )}
+            <div className={styles.venueInfo}>
+              {" "}
+              <div className={styles.meta}>
+                <h2>Info</h2>
+                <p>Wifi: {venue.meta.wifi ? "Yes" : "No"}</p>
+                <p>Parking: {venue.meta.parking ? "Yes" : "No"}</p>
+                <p>Breakfast: {venue.meta.breakfast ? "Yes" : "No"}</p>
+                <p>Pets allowed: {venue.meta.pets ? "Yes" : "No"}</p>
+              </div>
+              <div className={styles.location}>
+                <h2>Location</h2>
+                {!venue.location.address &&
+                !venue.location.city &&
+                !venue.location.zip &&
+                !venue.location.country ? (
+                  "Location unknown"
+                ) : (
+                  <>
+                    <p>Address: {venue.location.address}</p>
+                    <p>City: {venue.location.city}</p>
+                    <p>Zip: {venue.location.zip}</p>
+                    <p>Country: {venue.location.country}</p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.availableDates}>

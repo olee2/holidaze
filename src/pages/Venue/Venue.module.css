@@ -2,21 +2,46 @@
   color: var(--text-color);
 }
 
+.venue h1 {
+  font-size: 2rem;
+}
+
+.venueInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dividerLine {
+  background-color: var(--primary-color);
+  height: 1px;
+}
+
 .tag {
   background-color: var(--primary-color);
   color: #fff;
   padding: 1rem;
-  border-radius: 50px;
+  border-radius: 10px;
+}
+
+.availableDates {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .availableDates h2 {
-  text-align: center;
   margin-bottom: 1rem;
 }
 
 .venueContainer {
   display: flex;
   justify-content: space-between;
+  gap: 2rem;
+}
+
+.venueInfo {
+  display: flex;
   gap: 2rem;
 }
 

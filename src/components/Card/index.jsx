@@ -19,7 +19,7 @@ export const Card = (props) => {
         onError={() => (imageRef.current.src = "placeholder.jpeg")}
       />
       <div className={styles.textContainer}>
-        <h2>{name}</h2>
+        <h2 className={styles.cardH2}>{name}</h2>
         <p className={styles.description}>{description}</p>
         <div className={styles.priceBtnContainer}>
           <p className={styles.price}>{price} NOK/night</p>

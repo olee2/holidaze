@@ -21,6 +21,7 @@ const BookingForm = ({ bookings, venueId, onBookingMade, maxGuests }) => {
   ]);
   const [guests, setGuests] = useState(1);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleGuestsChange = (e) => {
     setGuests(e.target.value);
@@ -39,9 +40,19 @@ const BookingForm = ({ bookings, venueId, onBookingMade, maxGuests }) => {
       venueId: venueId,
     };
 
-    const newBooking = await createBooking(requestBody);
-    onBookingMade(newBooking);
-    setOpen(true);
+    try {
+      setError(null);
+      const response = await createBooking(requestBody);
+      console.log(response);
+      if (response.statusCode >= 400) {
+        setError(response.errors[0].message);
+      } else {
+        onBookingMade(response);
+        setOpen(true);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const bookedDates = bookings.reduce((dates, booking) => {
@@ -59,9 +70,9 @@ const BookingForm = ({ bookings, venueId, onBookingMade, maxGuests }) => {
   return (
     <>
       <div className={styles.bookingContainer}>
+        {error && <p className={styles.error}>An error occured: {error}</p>}
         <DateRange
           fixedHeight
-          styles={{ width: 100 }}
           onChange={(item) => setState([item.selection])}
           showSelectionPreview={true}
           direction="vertical"

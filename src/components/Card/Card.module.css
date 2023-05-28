@@ -4,6 +4,13 @@
   box-shadow: rgba(0, 0, 0, 0.07) 0px 0px 0px 1px;
 }
 
+.cardH2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .cardImage {
   object-fit: cover;
   height: 200px;
