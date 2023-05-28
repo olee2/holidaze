@@ -37,3 +37,23 @@
   width: 100%;
   color: var(--text-color);
 }
+
+.moreBtn {
+  align-self: center;
+  margin: 2rem 0 3rem 0;
+}
+
+.sortSearch {
+  display: flex;
+  align-items: center;
+  flex-direction: row !important;
+  gap: 1rem !important;
+}
+
+@media screen and (max-width: 900px) {
+  .sortSearch {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: flex-start;
+  }
+}

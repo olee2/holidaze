@@ -1,0 +1,29 @@
+.sortContainer {
+  display: flex;
+
+  flex: 1;
+  gap: 1rem;
+}
+
+.sortContainer select {
+  text-decoration: none;
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-color);
+  border-radius: 5px;
+  transition: 0.2s;
+  background-color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+.sortLabel {
+  color: var(--text-color);
+  font-size: 1.2rem;
+}
+
+.sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
