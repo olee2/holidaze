@@ -1,0 +1,46 @@
+.avatarForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 100%;
+}
+
+.avatarInputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatarLabel {
+  color: var(--text-color);
+  font-size: 1.2rem;
+}
+
+.avatarInput {
+  padding: 0.5rem;
+  background-repeat: no-repeat;
+  background-position: 95% center;
+  border: none;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: var(--secondary-color) 0px 0px 0px 1px;
+  transition: 0.2s;
+}
+
+.avatarInput:focus {
+  outline: none;
+  box-shadow: var(--secondary-color) 0px 0px 0px 2px;
+}
+
+.avatarButtons {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.avatarButtons button {
+  width: 150px;
+  padding: 0.5rem 0;
+}

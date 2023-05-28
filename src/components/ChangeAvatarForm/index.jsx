@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../pages/Profile/Profile.module.css";
+import styles from "./ChangeAvatarForm.module.css";
 
 const ChangeAvatarForm = ({
   avatarUrl,
