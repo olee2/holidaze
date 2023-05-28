@@ -14,7 +14,7 @@ const Home = () => {
   const [notFound, setNotFound] = useState(false);
   const [query, setQuery] = useState("");
   const [offset, setOffset] = useState(0);
-  const [sort, setSort] = useState("name");
+  const [sort, setSort] = useState("created");
   const [sortOrder, setSortOrder] = useState("asc");
   const [loadingMore, setLoadingMore] = useState(false);
 
@@ -39,14 +39,14 @@ const Home = () => {
     setSortOrder(event.target.value);
     setOffset(0);
     if (!loadingMore) {
-      setVenues([]); // Clear venues when sort order changes, only if not loading more
+      setVenues([]);
     }
   };
 
   useEffect(() => {
     const handleVenues = async () => {
       try {
-        const data = await fetchVenues(undefined, 10, offset, sort, sortOrder);
+        const data = await fetchVenues(undefined, 30, offset, sort, sortOrder);
         if (data && data.length > 0) {
           let updatedVenues = [...venues, ...data];
           setVenues(updatedVenues);

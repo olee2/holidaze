@@ -1,12 +1,13 @@
 .hero {
   background-image: linear-gradient(
-    rgba(248, 249, 250, 1),
-    rgba(248, 249, 250, 0.1)
-  );
+      rgba(248, 249, 250, 0.8),
+      rgba(248, 249, 250, 0.8)
+    ),
+    url("../../assets/background.jpg");
   background-position: center;
   background-size: cover;
   height: 20rem;
-  color: #d95f98;
+  color: var(--primary-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,8 +15,8 @@
 
 .hero p {
   font-size: 1.5rem;
-  font-weight: 500;
-  color: #d95f98;
+  font-weight: 600;
+  color: var(--primary-color);
 }
 
 .innerHero {
