@@ -21,11 +21,11 @@ const ChangeAvatarForm = ({
       </div>
 
       <div className={styles.avatarButtons}>
-        <button className="btn" type="submit">
+        <button className="btn-link" type="submit">
           Update Avatar
         </button>
         <button
-          className="btn"
+          className="btn-link"
           type="button"
           onClick={() => setIsEditingAvatar(false)}
         >

@@ -81,10 +81,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  max-width: 100%;
 }
 
 .avatarInputContainer {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
@@ -112,6 +114,7 @@
 
 .avatarButtons {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
   gap: 1rem;
 }
