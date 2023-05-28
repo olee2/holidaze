@@ -6,6 +6,7 @@ import { Card } from "../../components/Card";
 import { Search } from "../../components/Search";
 import { searchAlgo } from "../../utils/searchAlgo";
 import SortSelect from "../../components/SortSelect";
+import Loader from "../../components/Loader";
 
 const Home = () => {
   const [venues, setVenues] = useState([]);
@@ -94,6 +95,7 @@ const Home = () => {
 
       <div className={`inner-container ${styles.sortSearch}`}>
         <Search query={query} handleQuery={handleQuery} />
+
         <SortSelect
           sort={sort}
           sortOrder={sortOrder}
@@ -102,7 +104,7 @@ const Home = () => {
         />
       </div>
       {loader ? (
-        <div className={styles.loader} />
+        <Loader />
       ) : notFound ? (
         <div className={styles.notFound}>
           <p>No venues found.</p>

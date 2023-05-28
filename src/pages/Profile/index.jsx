@@ -15,6 +15,8 @@ import CreateVenueForm from "../../components/CreateVenueModal";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../../utils/isLoggedIn";
+import Loader from "../../components/Loader";
+import Error from "../../components/Error";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -28,6 +30,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [venueDialogOpen, setVenueDialogOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +53,10 @@ const UserProfile = () => {
               .then((venuesData) => {
                 setVenues(venuesData);
               })
-              .catch((err) => console.error(err));
+              .catch((err) => {
+                setError(true);
+                console.error(err);
+              });
           } else {
             Promise.all(
               profile.bookings.map((booking) => fetchBooking(booking.id))
@@ -60,11 +66,15 @@ const UserProfile = () => {
               })
               .catch((err) => {
                 console.error(err);
+                setError(true);
                 setLoading(false);
               });
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          setError(true);
+          console.error(err);
+        });
     }
   }, []);
 
@@ -111,8 +121,18 @@ const UserProfile = () => {
   if (loading) {
     return (
       <main>
-        <div className="inner-container">Loading...</div>
+        <div className="inner-container">
+          <Loader />
+        </div>
       </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="inner-container">
+        <Error />
+      </div>
     );
   }
 

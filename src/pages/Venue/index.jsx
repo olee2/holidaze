@@ -4,10 +4,13 @@ import { fetchVenues } from "../../api/fetchVenues";
 import styles from "./Venue.module.css";
 import ImageCarousel from "../../components/ImageCarousel";
 import BookingForm from "../../components/BookingForm";
+import Loader from "../../components/Loader";
+import Error from "../../components/Error";
 
 const Venue = () => {
   const [venue, setVenue] = useState(null);
   const { id } = useParams();
+  const [error, setError] = useState(false);
 
   const [bookings, setBookings] = useState([]);
 
@@ -16,16 +19,33 @@ const Venue = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedVenue = await fetchVenues(id);
-      setVenue(fetchedVenue);
-      setBookings(fetchedVenue.bookings);
-    };
-    fetchData();
+    try {
+      const fetchData = async () => {
+        const fetchedVenue = await fetchVenues(id);
+        setVenue(fetchedVenue);
+        setBookings(fetchedVenue.bookings);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      setError(true);
+    }
   }, [id]);
 
   if (!venue) {
-    return <p>Loading...</p>;
+    return (
+      <div className="inner-container">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="inner-container">
+        <Error />
+      </div>
+    );
   }
 
   return (
