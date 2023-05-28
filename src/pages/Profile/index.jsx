@@ -13,6 +13,8 @@ import styles from "./Profile.module.css";
 import ChangeAvatarForm from "../../components/ChangeAvatarForm";
 import CreateVenueForm from "../../components/CreateVenueModal";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../../utils/isLoggedIn";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -26,6 +28,45 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [venueDialogOpen, setVenueDialogOpen] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedIn = isLoggedIn();
+
+    if (!loggedIn) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && storedUser.name) {
+      fetchProfile(storedUser.name)
+        .then((profile) => {
+          setUser(storedUser);
+          setLoading(false);
+          if (storedUser.venueManager) {
+            Promise.all(profile.venues.map((venue) => fetchVenues(venue.id)))
+              .then((venuesData) => {
+                setVenues(venuesData);
+              })
+              .catch((err) => console.error(err));
+          } else {
+            Promise.all(
+              profile.bookings.map((booking) => fetchBooking(booking.id))
+            )
+              .then((bookingData) => {
+                setBookingDetails(bookingData);
+              })
+              .catch((err) => {
+                console.error(err);
+                setLoading(false);
+              });
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, []);
 
   const handleAvatarSubmit = (event) => {
     event.preventDefault();
@@ -57,36 +98,6 @@ const UserProfile = () => {
       );
     });
   };
-
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser && storedUser.name) {
-      fetchProfile(storedUser.name)
-        .then((profile) => {
-          setUser(storedUser);
-          setLoading(false);
-          if (storedUser.venueManager) {
-            Promise.all(profile.venues.map((venue) => fetchVenues(venue.id)))
-              .then((venuesData) => {
-                setVenues(venuesData);
-              })
-              .catch((err) => console.error(err));
-          } else {
-            Promise.all(
-              profile.bookings.map((booking) => fetchBooking(booking.id))
-            )
-              .then((bookingData) => {
-                setBookingDetails(bookingData);
-              })
-              .catch((err) => {
-                console.error(err);
-                setLoading(false);
-              });
-          }
-        })
-        .catch((err) => console.error(err));
-    }
-  }, []);
 
   const openVenueDialog = (venue) => {
     setSelectedVenue(venue);
